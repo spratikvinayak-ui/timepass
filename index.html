@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Fitness Website</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(to bottom, #000, #1a1a1a); color: #fff; min-height: 100vh; }
+        
+        /* Navigation */
+        .navbar { background: #000; border-bottom: 2px solid #ff6600; padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.8rem; font-weight: bold; }
+        .logo-icon { width: 40px; height: 40px; background: #ff6600; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .logo span { color: #ff6600; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .nav-links button { background: none; border: none; color: #fff; cursor: pointer; font-size: 1rem; padding: 0.5rem 1rem; }
+        .nav-links button:hover { color: #ff6600; }
+        .btn-primary { background: #ff6600; padding: 0.7rem 1.5rem; border-radius: 5px; font-weight: bold; border: none; color: #fff; cursor: pointer; }
+        .btn-primary:hover { background: #ff8533; }
+        
+        /* Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .hidden { display: none; }
+        
+        /* Reusable Components */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .card { background: #2a2a2a; padding: 2rem; border-radius: 10px; border: 2px solid #ff6600; overflow: hidden; }
+        .icon { width: 60px; height: 60px; background: #ff6600; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 1rem; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 2rem; }
+        
+        /* Home Page */
+        .hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: center; gap: 2.5rem; padding: 4rem 2rem; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.3rem; color: #ccc; margin-bottom: 2rem; }
+        .hero-image { max-width: 420px; width: 100%;  }
+        
+        /* Forms */
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group input { width: 100%; padding: 1rem; background: #1a1a1a; border: 1px solid #444; border-radius: 5px; color: #fff; font-size: 1rem; }
+        .error { color: #ff6600; font-size: 0.85rem; display: none; margin-top: 0.5rem; }
+        
+        /* BMI Calculator */
+        .result-box { margin-top: 2rem; padding: 2rem; background: #1a1a1a; border-radius: 10px; text-align: center; }
+        .result-value { font-size: 3rem; color: #ff6600; font-weight: bold; }
+        
+        /* Nutrition Table */
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #ff6600; padding: 1rem; text-align: left; }
+        td { padding: 1rem; border-bottom: 1px solid #444; }
+        
+        /* Programs Tabs */
+        .tabs { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+        .tab-btn { padding: 1rem 2rem; background: #2a2a2a; border: none; border-radius: 10px; color: #fff; cursor: pointer; font-weight: bold; }
+        .tab-btn.active { background: #ff6600; }
+        
+        /* PROGRAM CARDS */
+        #programs .card {
+            width: 320px;
+            min-height: 430px;
+            overflow: hidden;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        #programs .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.4);
+            border-color: #ff8533;
+        }
+
+        /* Card Image Wrapper */
+        #programs .card-img {
+            width: 100%;
+            height: 260px;   
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        #programs .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;	 
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        #programs .card:hover .card-img img {
+            transform: scale(1.1);
+        }
+
+        /* Card Content */
+        #programs .card h3,
+        #programs .card p,
+        #programs .card .badge {
+            padding: 0 1.5rem;
+        }
+
+        #programs .card h3 {
+            padding-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        #programs .card:hover h3 {
+            color: #ff6600;
+        }
+
+        #programs .card p {
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+
+        #programs .card .badge {
+            display: inline-block;
+            margin: 1rem 1.5rem 1.5rem 1.5rem;
+        }
+        
+        .badge { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 5px; font-size: 0.85rem; font-weight: bold; margin-top: 0.5rem; }
+        .badge-equipment { background: #ff6600; }
+        .badge-bodyweight { background: #00cc66; }
+        
+        /* Exercise Lists */
+        .exercise-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+        .exercise-item {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .exercise-item:hover {
+            background: #2a2a2a;
+            transform: translateX(10px);
+            border-color: #ff6600;
+        }
+
+        .exercise-icon {
+            width: 60px;
+            height: 60px;
+            background: #333;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #ff6600;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover .exercise-icon {
+            background: #ff6600;
+            color: #fff;
+            transform: rotate(360deg);
+        }
+
+        .exercise-item h4 {
+            margin-bottom: 0.3rem;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        .exercise-item:hover h4 {
+            color: #ff6600;
+        }
+
+        /* Body Parts Section Cards */
+        #bodypartsTab .card {
+            width: 100%;
+            background: #2b2b2b;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #ff6600;
+            padding: 2rem;
+        }
+
+        #bodypartsTab .card:hover {
+            border-color: #ff8533;
+            box-shadow: 0 5px 20px rgba(255, 102, 0, 0.3);
+        }
+
+        /* Cardio Page Cards */
+        #cardio .card {
+            width: 320px;
+            background: #2b2b2b;
+            border-radius: 18px;
+            transition: all 0.3s ease;
+            overflow: hidden; 
+        }
+
+        #cardio .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.4);
+            border-color: #ff8533;
+        }
+
+        #cardio .program-image {
+            width: 100%;
+            height: 480px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #ff6600;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        #cardio .program-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        #cardio .card:hover .program-image {
+            background: #ff6600;
+            color: #fff;
+        }
+
+        #cardio .card:hover .program-image img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">HF</div>
+            <div>Health <span>Fitness</span></div>
+        </div>
+        <div class="nav-links">
+            <button onclick="showPage('home')">Home</button>
+            <button onclick="showPage('programs')">Programs</button>
+            <button onclick="showPage('bmi')">BMI</button>
+            <button onclick="showPage('nutrition')">Nutrition</button>
+            <button onclick="showPage('cardio')">Cardio</button>
+            <div id="userSection">
+                <button class="btn-primary" onclick="showPage('auth')">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <div class="container">
+            <div class="hero">
+                <div>
+                    <h1>Transform Your <span>Body</span></h1>
+                    <p>Your journey to fitness starts here.</p>
+                    <p id="welcomeMessage" style="font-size: 1.5rem; color: #ff6600; margin-bottom: 1rem; display: none;"></p>
+                    <button class="btn-primary" onclick="showPage('programs')">Get Started</button>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                   <img src="images/hero1.jpeg" alt="Chest Workout">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN/SIGNUP PAGE -->
+    <div id="auth" class="page">
+        <div style="max-width: 400px; margin: 4rem auto;" class="card">
+            <h2 id="authTitle">Login</h2>
+            
+            <div class="form-group hidden" id="nameGroup">
+                <input type="text" id="name" placeholder="Full Name">
+                <div class="error" id="nameError"></div>
+            </div>
+            
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email">
+                <div class="error" id="emailError"></div>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password">
+                <div class="error" id="passwordError"></div>
+                <small style="color: #ccc; font-size: 0.85rem; display: block; margin-top: 0.5rem;">
+                    Password must be at least 8 characters with one special character (!@#$%^&*)
+                </small>
+            </div>
+            
+            <button class="btn-primary" style="width: 100%;" onclick="handleAuth()">Login</button>
+            
+            <p style="text-align: center; margin-top: 1rem; color: #ccc;">
+                <span id="authSwitchText">Need an account?</span>
+                <button style="color: #ff6600; background: none; border: none; cursor: pointer;" onclick="toggleAuthMode()">Sign Up</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- BMI CALCULATOR PAGE -->
+    <div id="bmi" class="page">
+        <div class="container">
+            <h2 class="section-title">BMI <span>Calculator</span></h2>
+            <div style="max-width: 600px; margin: 0 auto;" class="card">
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 0.5rem;">Height (cm)</label>
+                    <input type="number" id="height">
+                </div>
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 0.5rem;">Weight (kg)</label>
+                    <input type="number" id="weight">
+                </div>
+                <button class="btn-primary" style="width: 100%;" onclick="calculateBMI()">Calculate BMI</button>
+                <div id="bmiResult" class="result-box hidden">
+                    <div class="result-value" id="bmiValue"></div>
+                    <p style="font-size: 1.3rem; margin-top: 1rem;">Category: <span id="bmiCategory"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NUTRITION PAGE -->
+    <div id="nutrition" class="page">
+        <div class="container">
+            <h2 class="section-title">Nutrition <span>Chart</span></h2>
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Food</th>
+                            <th>Calories</th>
+                            <th>Protein</th>
+                            <th>Carbs</th>
+                            <th>Fats</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Chicken Breast</td><td style="color: #ff6600;">165</td><td>31g</td><td>0g</td><td>3.6g</td></tr>
+                        <tr><td>Brown Rice</td><td style="color: #ff6600;">215</td><td>5g</td><td>45g</td><td>1.8g</td></tr>
+                        <tr><td>Broccoli</td><td style="color: #ff6600;">55</td><td>3.7g</td><td>11g</td><td>0.6g</td></tr>
+                        <tr><td>Salmon</td><td style="color: #ff6600;">208</td><td>20g</td><td>0g</td><td>13g</td></tr>
+                        <tr><td>Sweet Potato</td><td style="color: #ff6600;">86</td><td>1.6g</td><td>20g</td><td>0.1g</td></tr>
+                        <tr><td>Eggs</td><td style="color: #ff6600;">155</td><td>13g</td><td>1.1g</td><td>11g</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROGRAMS PAGE -->
+    <div id="programs" class="page">
+        <div class="container">
+            <h2 class="section-title">Fitness <span>Programs</span></h2>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab(event,'equipment')">Equipment Based</button>
+                <button class="tab-btn" onclick="switchTab(event,'bodyweight')">Bodyweight</button>
+                <button class="tab-btn" onclick="switchTab(event,'bodyparts')">Body Parts</button>
+            </div>
+            
+            <!-- Equipment Tab -->
+            <div id="equipmentTab">
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Db-Press.jpeg" alt="Chest Workout">
+                        </div>
+                        <h3>Chest Workout</h3>
+                        <p>Build strength and muscle</p>
+                        <p>4 sets × 10 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Bb-Squat.jpeg" alt="Barbell Squat">
+                        </div>
+                        <h3>Barbell Squat</h3>
+                        <p>Build strength and muscle</p>
+                        <p>4 sets × 8 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Cr-Rows.jpeg" alt="Cable Rows">
+                        </div>
+                        <h3>Cabel Rows</h3>
+                        <p>Build strength and muscle</p>
+                        <p>3 sets × 12 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Lp-Press.jpeg" alt="Leg Press">
+                        </div>
+                        <h3>Leg Press</h3>
+                        <p>Build strength and muscle</p>
+                        <p>4 sets × 12 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Lat-Pull.jpeg" alt="Lat Pulldown">
+                        </div>
+                        <h3>Lat Pull Down</h3>
+                        <p>Build strength and muscle</p>
+                        <p>3 sets × 12 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Sp-Press.jpeg" alt="Shoulder Press">
+                        </div>
+                        <h3>Shoulder Press</h3>
+                        <p>Build strength and muscle</p>
+                        <p>4 sets × 10 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Bc-Curls.jpeg" alt="Bicep Curls">
+                        </div>
+                        <h3>Bicep Curls</h3>
+                        <p>Build strength and muscle</p>
+                        <p>3 sets × 12 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Te-Extension.jpeg" alt="Tricep Extension">
+                        </div>
+                        <h3>Tricep Extension</h3>
+                        <p>Build strength and muscle</p>
+                        <p>3 sets × 12 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Lc-Curls.jpeg" alt="Leg Curls">
+                        </div>
+                        <h3>Leg Curls</h3>
+                        <p>Build strength and muscle</p>
+                        <p>3 sets × 15 reps</p>
+                        <span class="badge badge-equipment">Equipment</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bodyweight Tab -->
+            <div id="bodyweightTab" class="hidden">
+                <div class="grid">
+                    <div class="card">	
+                        <div class="card-img">
+                            <img src="images/Pu-Ups.jpeg" alt="Push Ups">
+                        </div>
+                        <h3>Push Ups</h3>
+                        <p>3 sets × 15 reps</p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Pl-Ups.jpeg" alt="Pull Ups">
+                        </div>
+                        <h3>Pull Ups</h3>
+                        <p>3 sets × 8 reps</p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Squats-Sits.jpeg" alt="Bodyweight Squat">
+                        </div>
+                        <h3>Bodyweight Squat</h3>
+                        <p>4 sets × 12 reps</p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Planks-Hold.jpeg" alt="Planks">
+                        </div>
+                        <h3>Planks</h3>
+                        <p>3 sets × 45 sec</p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Td-Push.jpeg" alt="Tricep Dips">
+                        </div>
+                        <h3>Tricep Dips</h3>
+                        <p>3 sets × 12 reps</p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Lu-Legs.jpeg" alt="Lunges">
+                        </div>
+                        <h3>Lunges</h3>
+                        <p>3 sets × 12 reps</p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Co-Still.jpeg" alt="Core">
+                        </div>
+                        <h3>Core</h3>
+                        <p>3 sets × 15 reps</p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="images/Lr-Ups.jpeg" alt="Leg Raises">
+                        </div>
+                        <h3>Leg Raises</h3>
+                        <p>3 sets × 12 reps</p>
+                        <span class="badge badge-bodyweight">No Equipment</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Body Parts Tab (RESTORED FULL) -->
+            <div id="bodypartsTab" class="hidden">
+                <!-- Chest -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="color: #ff6600; margin-bottom: 1.5rem;">Chest Workout</h3>
+                    <div class="exercise-list">
+                        <div class="exercise-item">
+                            <div class="exercise-icon">BP</div>
+                            <div>
+                                <h4>Bench Press</h4>
+                                <p>4 sets × 8 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">PU</div>
+                            <div>
+                                <h4>Push-ups</h4>
+                                <p>3 sets × 15 reps</p>
+                                <span class="badge badge-bodyweight">Bodyweight</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">IF</div>
+                            <div>
+                                <h4>Incline Flyes</h4>
+                                <p>3 sets × 12 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">DP</div>
+                            <div>
+                                <h4>Dumbbell Press</h4>
+                                <p>4 sets × 10 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">CC</div>
+                            <div>
+                                <h4>Cable Crossover</h4>
+                                <p>3 sets × 12 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">DI</div>
+                            <div>
+                                <h4>Chest Dips</h4>
+                                <p>3 sets × 10 reps</p>
+                                <span class="badge badge-bodyweight">Bodyweight</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">PP</div>
+                            <div>
+                                <h4>Pec Deck</h4>
+                                <p>3 sets × 15 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Back -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="color: #ff6600; margin-bottom: 1.5rem;">Back Workout</h3>
+                    <div class="exercise-list">
+                        <div class="exercise-item">
+                            <div class="exercise-icon">DL</div>
+                            <div>
+                                <h4>Deadlift</h4>
+                                <p>4 sets × 6 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">PU</div>
+                            <div>
+                                <h4>Pull-ups</h4>
+                                <p>3 sets × 8 reps</p>
+                                <span class="badge badge-bodyweight">Bodyweight</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">BR</div>
+                            <div>
+                                <h4>Barbell Rows</h4>
+                                <p>4 sets × 10 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">LP</div>
+                            <div>
+                                <h4>Lat Pulldown</h4>
+                                <p>3 sets × 12 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">CR</div>
+                            <div>
+                                <h4>Cable Rows</h4>
+                                <p>3 sets × 12 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">FS</div>
+                            <div>
+                                <h4>Face Pulls</h4>
+                                <p>3 sets × 15 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">TY</div>
+                            <div>
+                                <h4>T-Bar Rows</h4>
+                                <p>4 sets × 8 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Legs -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="color: #ff6600; margin-bottom: 1.5rem;">Legs Workout</h3>
+                    <div class="exercise-list">
+                        <div class="exercise-item">
+                            <div class="exercise-icon">SQ</div>
+                            <div>
+                                <h4>Squats</h4>
+                                <p>4 sets × 8 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">LG</div>
+                            <div>
+                                <h4>Lunges</h4>
+                                <p>3 sets × 12 reps</p>
+                                <span class="badge badge-bodyweight">Bodyweight</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">LP</div>
+                            <div>
+                                <h4>Leg Press</h4>
+                                <p>4 sets × 12 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">LC</div>
+                            <div>
+                                <h4>Leg Curls</h4>
+                                <p>3 sets × 15 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">LE</div>
+                            <div>
+                                <h4>Leg Extensions</h4>
+                                <p>3 sets × 15 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">CR</div>
+                            <div>
+                                <h4>Calf Raises</h4>
+                                <p>4 sets × 20 reps</p>
+                                <span class="badge badge-bodyweight">Bodyweight</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">RD</div>
+                            <div>
+                                <h4>Romanian Deadlift</h4>
+                                <p>3 sets × 10 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Arms -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="color: #ff6600; margin-bottom: 1.5rem;">Arms Workout</h3>
+                    <div class="exercise-list">
+                        <div class="exercise-item">
+                            <div class="exercise-icon">BC</div>
+                            <div>
+                                <h4>Barbell Curls</h4>
+                                <p>4 sets × 10 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">TD</div>
+                            <div>
+                                <h4>Tricep Dips</h4>
+                                <p>3 sets × 12 reps</p>
+                                <span class="badge badge-bodyweight">Bodyweight</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">HC</div>
+                            <div>
+                                <h4>Hammer Curls</h4>
+                                <p>3 sets × 12 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">TE</div>
+                            <div>
+                                <h4>Tricep Extensions</h4>
+                                <p>3 sets × 15 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">CC</div>
+                            <div>
+                                <h4>Concentration Curls</h4>
+                                <p>3 sets × 10 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Shoulders -->
+                <div class="card">
+                    <h3 style="color: #ff6600; margin-bottom: 1.5rem;">Shoulders Workout</h3>
+                    <div class="exercise-list">
+                        <div class="exercise-item">
+                            <div class="exercise-icon">OP</div>
+                            <div>
+                                <h4>Overhead Press</h4>
+                                <p>4 sets × 8 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">LR</div>
+                            <div>
+                                <h4>Lateral Raises</h4>
+                                <p>3 sets × 15 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">FR</div>
+                            <div>
+                                <h4>Front Raises</h4>
+                                <p>3 sets × 12 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">RD</div>
+                            <div>
+                                <h4>Rear Delt Flyes</h4>
+                                <p>3 sets × 15 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-icon">SH</div>
+                            <div>
+                                <h4>Shrugs</h4>
+                                <p>4 sets × 12 reps</p>
+                                <span class="badge badge-equipment">Equipment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARDIO PAGE -->
+    <div id="cardio" class="page">
+        <div class="container">
+            <h2 class="section-title">Basic <span>Cardio</span></h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="program-image"><img src="images/Running-cardio.jpeg" alt="Running"></div>
+                    <h3>Running</h3>
+                    <p>Duration: 20–30 min</p>
+                    <p>Intensity: Moderate</p>
+                    <p style="color: #ff6600;">Burns about 300 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/JumpRope-cardio.jpeg" alt="Jump Rope"></div>
+                    <h3>Jump Rope</h3>
+                    <p>Duration: 15–20 min</p>
+                    <p>Intensity: High</p>
+                    <p style="color: #ff6600;">Burns about 250 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/Cycling-cardio.jpeg" alt="Cycling"></div>
+                    <h3>Cycling</h3>
+                    <p>Duration: 30–45 min</p>
+                    <p>Intensity: Moderate</p>
+                    <p style="color: #ff6600;">Burns about 350 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/Burpees-cardio.jpeg" alt="Burpees"></div>
+                    <h3>Burpees</h3>
+                    <p>Duration: 10–15 min</p>
+                    <p>Intensity: High</p>
+                    <p style="color: #ff6600;">Burns about 200 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/Swiming-cardio.jpeg" alt="Swimming"></div>
+                    <h3>Swimming</h3>
+                    <p>Duration: 30–40 min</p>
+                    <p>Intensity: Moderate</p>
+                    <p style="color: #ff6600;">Burns about 400 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/Rowing-cardio.jpeg" alt="Rowing"></div>
+                    <h3>Rowing</h3>
+                    <p>Duration: 20–30 min</p>
+                    <p>Intensity: High</p>
+                    <p style="color: #ff6600;">Burns about 320 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/StairClimbing-cardio.jpeg" alt="Stair Climbing"></div>
+                    <h3>Stair Climbing</h3>
+                    <p>Duration: 15–25 min</p>
+                    <p>Intensity: High</p>
+                    <p style="color: #ff6600;">Burns about 280 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/Elliptical-cardio.jpeg" alt="Elliptical"></div>
+                    <h3>Elliptical</h3>
+                    <p>Duration: 25–35 min</p>
+                    <p>Intensity: Moderate</p>
+                    <p style="color: #ff6600;">Burns about 300 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/HighKnees-cardio.jpeg" alt="High Knees"></div>
+                    <h3>High Knees</h3>
+                    <p>Duration: 10–15 min</p>
+                    <p>Intensity: High</p>
+                    <p style="color: #ff6600;">Burns about 180 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/BoxJumps-cardio.jpeg" alt="Box Jumps"></div>
+                    <h3>Box Jumps</h3>
+                    <p>Duration: 10–15 min</p>
+                    <p>Intensity: High</p>
+                    <p style="color: #ff6600;">Burns about 220 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/Dancing-cardio.jpeg" alt="Dancing"></div>
+                    <h3>Dancing</h3>
+                    <p>Duration: 30–45 min</p>
+                    <p>Intensity: Moderate</p>
+                    <p style="color: #ff6600;">Burns about 250 cal</p>
+                </div>
+
+                <div class="card">
+                    <div class="program-image"><img src="images/KickBoxing-cardio.jpeg" alt="Kickboxing"></div>
+                    <h3>Kickboxing</h3>
+                    <p>Duration: 20–30 min</p>
+                    <p>Intensity: High</p>
+                    <p style="color: #ff6600;">Burns about 350 cal</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CODE -->
+    <script>
+        let user = null;
+        let authMode = 'login';
+        let loggedInUserId = null;
+
+        function showPage(pageName) {
+            const allPages = document.querySelectorAll('.page');
+            allPages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+        }
+
+        function toggleAuthMode() {
+            authMode = (authMode === 'login') ? 'signup' : 'login';
+
+            const nameField = document.getElementById('nameGroup');
+            const title = document.getElementById('authTitle');
+            const switchText = document.getElementById('authSwitchText');
+
+            if (authMode === 'signup') {
+                nameField.classList.remove('hidden');
+                title.textContent = 'Create Account';
+                switchText.textContent = 'Already have an account?';
+            } else {
+                nameField.classList.add('hidden');
+                title.textContent = 'Login';
+                switchText.textContent = 'Need an account?';
+            }
+
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.getElementById('nameError').style.display = 'none';
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('passwordError').style.display = 'none';
+        }
+
+        function validateEmail(email) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailPattern.test(email);
+        }
+
+        function validatePassword(password) {
+            const hasSpecialChar = /[!@#$%^&*]/.test(password);
+            const isLongEnough = password.length >= 8;
+            return hasSpecialChar && isLongEnough;
+        }
+
+        // ✅ CONNECTED HANDLEAUTH (MYSQL BACKEND)
+        async function handleAuth() {
+            clearErrors();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            let isValid = true;
+
+            if (authMode === 'signup' && !name.trim()) {
+                document.getElementById('nameError').textContent = 'Please enter your full name';
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!email.trim()) {
+                document.getElementById('emailError').textContent = 'Please enter your email';
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address';
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!password) {
+                document.getElementById('passwordError').textContent = 'Please enter your password';
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            } else if (!validatePassword(password)) {
+                document.getElementById('passwordError').textContent =
+                    'Password must be at least 8 characters with one special character (!@#$%^&*)';
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            try {
+                const url = (authMode === "signup")
+                    ? "http://localhost:5000/api/register"
+                    : "http://localhost:5000/api/login";
+
+                const payload = (authMode === "signup")
+                    ? { name, email, password }
+                    : { email, password };
+
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(data.message || "Something went wrong");
+                    return;
+                }
+
+                alert(data.message);
+
+                if (data.userId) {
+                    loggedInUserId = data.userId;
+                    user = { name: data.name, email: email };
+
+                    document.getElementById('userSection').innerHTML =
+                        `<span style="color: #ff6600;">Hi, ${data.name}</span>
+                        <button class="btn-primary" onclick="logout()">Logout</button>`;
+
+                    document.getElementById('welcomeMessage').textContent = 'Welcome back, ' + data.name + '!';
+                    document.getElementById('welcomeMessage').style.display = 'block';
+
+                    showPage('home');
+                }
+
+            } catch (err) {
+                console.error("Fetch Error:", err);
+                alert("Backend not reachable. Start Node server: node server.js");
+            }
+        }
+
+        function logout() {
+            user = null;
+            loggedInUserId = null;
+
+            document.getElementById('userSection').innerHTML =
+                '<button class="btn-primary" onclick="showPage(\'auth\')">Login</button>';
+
+            document.getElementById('welcomeMessage').style.display = 'none';
+
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('name').value = '';
+
+            clearErrors();
+        }
+
+        function calculateBMI() {
+            const heightCm = parseFloat(document.getElementById('height').value);
+            const heightM = heightCm / 100;
+            const weight = parseFloat(document.getElementById('weight').value);
+
+            if (!heightM || !weight) {
+                alert('Please enter height and weight');
+                return;
+            }
+
+            const bmi = (weight / (heightM * heightM)).toFixed(1);
+
+            let category;
+            if (bmi < 18.5) category = 'Underweight';
+            else if (bmi < 25) category = 'Normal';
+            else if (bmi < 30) category = 'Overweight';
+            else category = 'Obese';
+
+            document.getElementById('bmiValue').textContent = bmi;
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('bmiResult').classList.remove('hidden');
+        }
+
+        function switchTab(event, tabName) {
+            const allTabs = document.querySelectorAll('.tab-btn');
+            allTabs.forEach(tab => tab.classList.remove('active'));
+
+            event.target.classList.add('active');
+
+            document.getElementById('equipmentTab').classList.add('hidden');
+            document.getElementById('bodyweightTab').classList.add('hidden');
+            document.getElementById('bodypartsTab').classList.add('hidden');
+
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
